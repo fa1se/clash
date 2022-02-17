@@ -75,3 +75,7 @@ func (p *path) OldCache() string {
 func (p *path) Cache() string {
 	return P.Join(p.homeDir, "cache.db")
 }
+
+func (p *path) DLC() string {
+	return P.Join(p.homeDir, "dlc.dat")
+}

@@ -38,6 +38,8 @@ func ParseRule(tp, payload, target string, params []string) (C.Rule, error) {
 	case "IPSET":
 		noResolve := HasNoResolve(params)
 		parsed, parseErr = NewIPSet(payload, target, noResolve)
+	case "GEOSITE":
+		parsed = NewGEOSITE(payload, target)
 	case "MATCH":
 		parsed = NewMatch(target)
 	default:

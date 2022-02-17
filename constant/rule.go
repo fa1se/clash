@@ -13,6 +13,7 @@ const (
 	Process
 	ProcessPath
 	IPSet
+	GEOSITE
 	MATCH
 )
 
@@ -42,6 +43,8 @@ func (rt RuleType) String() string {
 		return "ProcessPath"
 	case IPSet:
 		return "IPSet"
+	case GEOSITE:
+		return "GeoSite"
 	case MATCH:
 		return "Match"
 	default:
