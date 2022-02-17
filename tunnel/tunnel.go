@@ -14,6 +14,7 @@ import (
 	"github.com/Dreamacro/clash/component/nat"
 	P "github.com/Dreamacro/clash/component/process"
 	"github.com/Dreamacro/clash/component/resolver"
+	"github.com/Dreamacro/clash/component/sniff"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/constant/provider"
 	icontext "github.com/Dreamacro/clash/context"
@@ -314,6 +315,14 @@ func handleTCPConn(connCtx C.ConnContext) {
 	if err := preHandleMetadata(metadata); err != nil {
 		log.Debugln("[Metadata PreHandle] error: %s", err)
 		return
+	}
+
+	if sniff.Enable() {
+		if sniffed, err := sniff.Sniff(connCtx.Conn()); err == nil {
+			metadata.Host = sniffed.Host
+			metadata.AddrType = C.AtypDomainName
+			log.Infoln("[Sniff] detected %s domain: %s", sniffed.Type.String(), sniffed.Host)
+		}
 	}
 
 	proxy, rule, err := resolveMetadata(connCtx, metadata)

@@ -35,6 +35,7 @@ type General struct {
 	IPv6        bool         `json:"ipv6"`
 	Interface   string       `json:"-"`
 	RoutingMark int          `json:"-"`
+	Sniff       bool         `json:"sniff"`
 }
 
 // Inbound
@@ -204,6 +205,7 @@ type RawConfig struct {
 	Interface          string       `yaml:"interface-name"`
 	RoutingMark        int          `yaml:"routing-mark"`
 	Tunnels            []Tunnel     `yaml:"tunnels"`
+	Sniff              bool         `yaml:"sniff"`
 
 	ProxyProvider map[string]map[string]any `yaml:"proxy-providers"`
 	Hosts         map[string]string         `yaml:"hosts"`
@@ -345,6 +347,7 @@ func parseGeneral(cfg *RawConfig) (*General, error) {
 		IPv6:        cfg.IPv6,
 		Interface:   cfg.Interface,
 		RoutingMark: cfg.RoutingMark,
+		Sniff:       cfg.Sniff,
 	}, nil
 }
 

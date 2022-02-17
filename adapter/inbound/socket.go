@@ -4,6 +4,7 @@ import (
 	"net"
 	"net/netip"
 
+	"github.com/Dreamacro/clash/component/sniff"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/context"
 	"github.com/Dreamacro/clash/transport/socks5"
@@ -20,6 +21,9 @@ func NewSocket(target socks5.Addr, conn net.Conn, source C.Type) *context.ConnCo
 	}
 	if addrPort, err := netip.ParseAddrPort(conn.LocalAddr().String()); err == nil {
 		metadata.OriginDst = addrPort
+	}
+	if source == C.TPROXY || source == C.REDIR {
+		conn = sniff.NewBufConn(conn)
 	}
 	return context.NewConnContext(conn, metadata)
 }

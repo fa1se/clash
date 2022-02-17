@@ -13,6 +13,7 @@ import (
 	"github.com/Dreamacro/clash/component/profile"
 	"github.com/Dreamacro/clash/component/profile/cachefile"
 	"github.com/Dreamacro/clash/component/resolver"
+	"github.com/Dreamacro/clash/component/sniff"
 	"github.com/Dreamacro/clash/component/trie"
 	"github.com/Dreamacro/clash/config"
 	C "github.com/Dreamacro/clash/constant"
@@ -99,6 +100,7 @@ func GetGeneral() *config.General {
 		Mode:     tunnel.Mode(),
 		LogLevel: log.Level(),
 		IPv6:     !resolver.DisableIPv6,
+		Sniff:    sniff.Enable(),
 	}
 
 	return general
@@ -177,6 +179,8 @@ func updateGeneral(general *config.General, force bool) {
 	if !force {
 		return
 	}
+
+	sniff.SetEnable(general.Sniff)
 
 	allowLan := general.AllowLan
 	listener.SetAllowLan(allowLan)
