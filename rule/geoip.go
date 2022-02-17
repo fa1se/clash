@@ -26,8 +26,7 @@ func (g *GEOIP) Match(metadata *C.Metadata) bool {
 	if strings.EqualFold(g.country, "LAN") {
 		return ip.IsPrivate()
 	}
-	record, _ := mmdb.Instance().Country(ip)
-	return strings.EqualFold(record.Country.IsoCode, g.country)
+	return mmdb.Match(ip, g.country)
 }
 
 func (g *GEOIP) Adapter() string {

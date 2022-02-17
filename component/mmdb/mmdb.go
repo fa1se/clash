@@ -1,6 +1,8 @@
 package mmdb
 
 import (
+	"net"
+	"strings"
 	"sync"
 
 	C "github.com/Dreamacro/clash/constant"
@@ -14,32 +16,18 @@ var (
 	once sync.Once
 )
 
-func LoadFromBytes(buffer []byte) {
-	once.Do(func() {
-		var err error
-		mmdb, err = geoip2.FromBytes(buffer)
-		if err != nil {
-			log.Fatalln("Can't load mmdb: %s", err.Error())
-		}
-	})
-}
-
-func Verify() bool {
-	instance, err := geoip2.Open(C.Path.MMDB())
-	if err == nil {
-		instance.Close()
-	}
-	return err == nil
-}
-
-func Instance() *geoip2.Reader {
+func Match(ip net.IP, country string) bool {
 	once.Do(func() {
 		var err error
 		mmdb, err = geoip2.Open(C.Path.MMDB())
 		if err != nil {
-			log.Fatalln("Can't load mmdb: %s", err.Error())
+			log.Warnln("[mmdb] Cannot load GeoIP: %s", err.Error())
 		}
 	})
-
-	return mmdb
+	if mmdb == nil {
+		log.Warnln("[mmdb] GeoIP data not loaded, matching always evaluates to false")
+		return false
+	}
+	record, _ := mmdb.Country(ip)
+	return strings.EqualFold(record.Country.IsoCode, country)
 }
