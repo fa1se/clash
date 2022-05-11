@@ -320,7 +320,6 @@ func handleTCPConn(connCtx C.ConnContext) {
 	if sniff.Enable() {
 		if sniffed, err := sniff.Sniff(connCtx.Conn()); err == nil {
 			metadata.Host = sniffed.Host
-			metadata.AddrType = C.AtypDomainName
 			log.Infoln("[Sniff] detected %s domain: %s", sniffed.Type.String(), sniffed.Host)
 		}
 	}
