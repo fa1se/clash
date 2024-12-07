@@ -8,7 +8,7 @@ import (
 	"github.com/Dreamacro/clash/component/trie"
 	C "github.com/Dreamacro/clash/constant"
 	"github.com/Dreamacro/clash/log"
-	dlc "github.com/fa1se/dlc-parser"
+	dlc "github.com/fa1se/dlc-parser/geosite"
 )
 
 var (

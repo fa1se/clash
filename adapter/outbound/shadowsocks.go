@@ -14,7 +14,7 @@ import (
 	obfs "github.com/Dreamacro/clash/transport/simple-obfs"
 	"github.com/Dreamacro/clash/transport/socks5"
 	v2rayObfs "github.com/Dreamacro/clash/transport/v2ray-plugin"
-	"github.com/sagernet/sing-shadowsocks"
+	shadowsocks "github.com/sagernet/sing-shadowsocks"
 	"github.com/sagernet/sing-shadowsocks/shadowimpl"
 	"github.com/sagernet/sing/common/buf"
 	"github.com/sagernet/sing/common/bufio"
@@ -108,13 +108,13 @@ func (ss *ShadowSocks) ListenPacketContext(ctx context.Context, metadata *C.Meta
 		pc.Close()
 		return nil, err
 	}
-	pc = ss.method.DialPacketConn(&bufio.BindPacketConn{PacketConn: pc, Addr: addr})
+	pc = ss.method.DialPacketConn(bufio.NewBindPacketConn(pc, addr))
 	return newPacketConn(pc, ss), nil
 }
 
 func NewShadowSocks(option ShadowSocksOption) (*ShadowSocks, error) {
 	addr := net.JoinHostPort(option.Server, strconv.Itoa(option.Port))
-	method, err := shadowimpl.FetchMethod(option.Cipher, option.Password)
+	method, err := shadowimpl.FetchMethod(option.Cipher, option.Password, nil)
 	if err != nil {
 		return nil, fmt.Errorf("ss %s initialize error: %w", addr, err)
 	}
